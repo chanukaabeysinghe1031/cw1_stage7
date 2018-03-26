@@ -1,7 +1,7 @@
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class BankAccount implements Serializable {
+public class BankAccount extends BankBranch implements Serializable  {
     private int accountNumber;
     private double accountBalance;
     private String customerName;
@@ -24,12 +24,10 @@ public class BankAccount implements Serializable {
     public void setAccountBalance(double accountBalance) {this.accountBalance = accountBalance;}
     //------------------------------------------------------------------------------------------------------------------
 
-    //create a constant to store the interest rate
-    final private static double interestRate=3;
-
     public BankAccount(int bankAccountNumber, double bankAccountBalance,
                        String customerName,int user_ID, String password,
-                       double autoWithdrowal, double autoDeposit) {
+                       double autoWithdrowal, double autoDeposit,int BSB ,String address, int postCode ) {
+        super(BSB,address,postCode);
         this.accountNumber = bankAccountNumber;
         this.accountBalance = bankAccountBalance;
         this.customerName = customerName;
@@ -55,10 +53,29 @@ public class BankAccount implements Serializable {
     //this method is to make a bank account
     public static BankAccount enterAccountData(String loggedCustomerName,int user_ID,String loggedPassword
             , ArrayList<BankAccount> allBankAccounts) {
+
         System.out.println("-----------------------------------------------------------");
         boolean isDuplicated = false;
-        int accountNumber;
+        int accountNumber,BSB,postCode;
         double accountBalance, annualInterestRate, autoWithdrowal, autoDeposit;
+        String address;
+
+        /*--------------------------------------------------------------------------------------------------------------
+        ---------------------------------------Take the bank account details--------------------------------------------
+        --------------------------------------------------------------------------------------------------------------*/
+
+        System.out.println("==========Please enter the bank branch  details==========");
+        System.out.println("Please enter the BSB no.");
+        System.out.print("Enter : ");
+        BSB=UserInterface.validate();
+        System.out.println("Please enter your address.");
+        System.out.print("Enter : ");
+        address=UserInterface.userInput.nextLine();
+        System.out.println("Please enter the post code.");
+        System.out.print("Enter : ");
+        postCode=UserInterface.validate();
+
+        System.out.println("==========Please enter following bank account details=====");
         System.out.println("Please enter a new account number.");
         System.out.print("Enter : ");
         accountNumber = UserInterface.validateAccountNumber();
@@ -99,8 +116,12 @@ public class BankAccount implements Serializable {
             System.out.print("Enter : ");
             autoDeposit = UserInterface.validateDouble();
             System.out.println("-----------------------------------------------------------");
+            //----------------------------------------------------------------------------------------------------------
+
+            //-------------Create the bank account object---------------------------------------------------------------
             BankAccount bankAccount = new BankAccount(accountNumber, accountBalance,
-                    loggedCustomerName, user_ID, loggedPassword, autoWithdrowal, autoDeposit);
+                    loggedCustomerName, user_ID, loggedPassword, autoWithdrowal, autoDeposit,BSB,address,postCode);
+            //----------------------------------------------------------------------------------------------------------
 
             return bankAccount;
 
